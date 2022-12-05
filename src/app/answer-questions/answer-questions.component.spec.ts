@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AnswerQuestionsComponent } from './answer-questions.component';
 
@@ -8,7 +9,8 @@ describe('AnswerQuestionsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AnswerQuestionsComponent ]
+      declarations: [ AnswerQuestionsComponent ],
+      imports: [ReactiveFormsModule]
     })
     .compileComponents();
 

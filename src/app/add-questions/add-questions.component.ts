@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -14,7 +14,7 @@ export class AddQuestionsComponent implements OnInit {
   public isEmpty = true;
   public questionList: any = [];
   public questionTypes = ['Paragraph', 'Checkbox list'];
-  public selectedType: 'Paragraph'| 'Checkbox list'='Paragraph';
+  public selectedType: 'Paragraph' | 'Checkbox list' = 'Paragraph';
 
   questionForm = this.fb.group({
     questions: this.fb.array([
@@ -36,7 +36,6 @@ export class AddQuestionsComponent implements OnInit {
     if (question) {
       this.questionList = JSON.parse(window.atob(question));
     }
-    console.log(this.questionList);
 
   }
 
@@ -47,8 +46,8 @@ export class AddQuestionsComponent implements OnInit {
 
   newQuestion(): FormGroup {
     return this.fb.group({
-      labelName: [''],
-      questionType: [''],
+      labelName: ['', [Validators.required]],
+      questionType: ['Paragraph'],
       isAllowOwnAns: [false],
       isRequiredField: [false],
       options: this.fb.array([
@@ -58,11 +57,11 @@ export class AddQuestionsComponent implements OnInit {
     });
   }
 
-
-
-
   addOptions(index: number) {
-    this.optionByQuestionIndex(index).push(this.fb.control(''));
+    if(this.optionByQuestionIndex(index).length<=5){
+      this.optionByQuestionIndex(index).push(this.fb.control(''));
+    }
+
   }
 
 
@@ -72,14 +71,18 @@ export class AddQuestionsComponent implements OnInit {
 
   onselectedType(e: any) {
     console.log(e.target.value);
-    this.selectedType=e.target.value;
+    this.selectedType = e.target.value;
   }
   onSubmit() {
-    if(this.questionForm.value.questions){
-      this.questionList=[...this.questionList,...this.questionForm.value.questions];
+    if (this.questionForm.invalid) {
+      return;
+    }
+    if (this.questionForm.value.questions) {
+      this.questionList = [...this.questionList, ...this.questionForm.value.questions];
     }
 
-    console.log(this.questionList);
+    // this.isEmpty=false;
+    window.location.reload();
     localStorage.setItem('questions', window.btoa(JSON.stringify(this.questionList)));
     this.modalService.dismissAll();
   }

@@ -9,18 +9,21 @@
                                 {{question.isRequiredField ? '*' : ''}}
                             </label>
                             <ng-container *ngIf="question.questionType=='Paragraph';else checkbox">
-                                <textarea class="form-control" id="" cols="30" rows="5" formControlName="paragraph"></textarea>
+                                <textarea class="form-control" id="" cols="30" rows="5"
+                                    formControlName="paragraph"></textarea>
                             </ng-container>
                             <ng-template #checkbox>
                                 <ng-container formArrayName="options">
                                     <div *ngFor="let option of question.options; let x=index">
-                                        <label>
-                                            <input type="checkbox" [formControlName]="x">
+                                        <label style="font-weight: 400;">
+                                            <input type="checkbox" [formControlName]="x" (click)="onClick(option,i)">
                                             {{option}}
                                         </label>
+                                        <!-- <ng-container *ngIf="expression"></ng-container>
+                                        <textarea class="form-control" id="" cols="30" rows="5"
+                                        formControlName="x"></textarea> -->
                                     </div>
                                 </ng-container>
-
                             </ng-template>
                         </div>
                     </ng-container>
@@ -28,8 +31,11 @@
                 </ng-container>
             </ng-container>
         </ng-container>
+        <ng-content select="[addbutton]"></ng-content>
+        <div class="d-flex justify-content-end">
+            <button class="btn btn-primary" (click)="onReview()">Review my answers ></button>
+        </div>
 
-        <button class="btn btn-primary" (click)="onReview()">Review my answers ></button>
     </form>
-    <ng-content select="[addbutton]"></ng-content>
+
 </div>

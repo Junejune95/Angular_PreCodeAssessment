@@ -2,6 +2,7 @@
 
 :root{
     --primary-color:#0a58ca;
+    --text-color:black;
 }
 html,body{
     height: 100%;
@@ -9,6 +10,16 @@ html,body{
 
 .container{
     height: 100%;
+    padding: 20px;
+}
+
+.form-group{
+    margin-bottom: 16px;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 10px;
 }
 
 button.btn.btn-primary,input.form-control,select.form-select,textarea.form-control {

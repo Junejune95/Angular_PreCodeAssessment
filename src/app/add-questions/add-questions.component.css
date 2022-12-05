@@ -8,8 +8,11 @@ h3.empty__text {
     margin-bottom: 3rem;
 }
 
-.form-group{
-    margin-bottom: 16px;
+
+button.btn.btn-link {
+    color: var(--text-color);
+    text-decoration: underline !important;
+    padding: 0;
 }
 
 button.btn.btn-link {

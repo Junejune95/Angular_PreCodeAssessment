@@ -54,20 +54,22 @@
                                 </ng-container>
                             </ng-container>
 
-                            <button type="button" class="btn btn-link mb-3" (click)="addOptions(i)">&plus; Add another
+                            <button type="button" class="btn btn-link mb-3" (click)="addOptions(i)"
+                            [disabled]="optionByQuestionIndex(i).length>4">&plus; Add another
                                 answer</button>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="ownanswer"
+                                        formControlName="isAllowOwnAns">
+                                    <label class="form-check-label" for="ownanswer">
+                                        Allow user to specify their own answer
+                                    </label>
+                                </div>
                         </ng-container>
 
                         <!-- end of option form array -->
 
                         <!-- start check box field from question -->
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="ownanswer"
-                                formControlName="isAllowOwnAns">
-                            <label class="form-check-label" for="ownanswer">
-                                Allow user to specify their own answer
-                            </label>
-                        </div>
+                     
 
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="fieldrequired"

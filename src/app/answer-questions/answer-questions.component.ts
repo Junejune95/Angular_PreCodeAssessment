@@ -26,29 +26,33 @@ export class AnswerQuestionsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    console.log(this.questionList);
     const reviewData = localStorage.getItem('review');
     if (reviewData) {
       const data = JSON.parse(window.atob(reviewData)).answers;
       this.questionList.map((question: any) => {
-        console.log(question.labelName);
         const exitData = data.filter((val: any) => val.labelName === question.labelName);
-        console.log(exitData);
         const group: any = {};
         group.options = new FormArray([]);
         question.options.map((opt: any) => {
           if (exitData.length > 0) {
             const exitOption = exitData[0].options.filter((val: any) => val === opt);
             group.options.push(this.fb.control(exitOption[0]));
-
           } else {
 
             group.options.push(this.fb.control(''));
+            // if(question.isAllowOwnAns){
+            //   question.options.push('Other');
+            //   group.options.push(this.fb.control(''));
+            // }
           }
 
         });
         group.paragraph = new FormControl(exitData.length === 0 ? '' : exitData[0].paragraph);
         if (question.isRequiredField === true) {
-          group.paragraph.setValidators(Validators.required);
+          if (question.questionType === 'Paragraph') {
+            group.paragraph.setValidators(Validators.required);
+          }
           if (question.questionType === 'Checkbox list') {
             group.options.setValidators(Validators.required);
           }
@@ -57,15 +61,21 @@ export class AnswerQuestionsComponent implements OnInit, OnDestroy {
       });
     } else {
       this.questionList.map((question: any) => {
-        console.log(question);
         const group: any = {};
         group.options = new FormArray([]);
         question.options.map(() => {
           group.options.push(this.fb.control(''));
+          // if(question.isAllowOwnAns){
+          //   question.options.push('Other');
+          //   group.options.push(this.fb.control(''));
+          // }
         });
         group.paragraph = new FormControl('');
         if (question.isRequiredField === true) {
-          group.paragraph.setValidators(Validators.required);
+          if (question.questionType === 'Paragraph') {
+            group.paragraph.setValidators(Validators.required);
+          }
+
           if (question.questionType === 'Checkbox list') {
             group.options.setValidators(Validators.required);
           }
@@ -92,7 +102,6 @@ export class AnswerQuestionsComponent implements OnInit, OnDestroy {
       return;
     }
     const review = this.answerForm.value;
-    console.log(this.answerForm.value);
     if (review.answers) {
       review.answers.map((data: any, index: number) => {
         data.labelName = this.questionList[index].labelName;
@@ -107,6 +116,13 @@ export class AnswerQuestionsComponent implements OnInit, OnDestroy {
 
     localStorage.setItem('review', window.btoa(JSON.stringify(review)));
     this.router.navigateByUrl('form/answers');
+  }
+
+  onClick(option: any,index: any){
+    console.log(this.optionByIndex(index));
+    // if(option==='Other'){
+    //   this.optionByIndex(index).push(this.fb.control(''));
+    // }
   }
 
   ngOnDestroy() {

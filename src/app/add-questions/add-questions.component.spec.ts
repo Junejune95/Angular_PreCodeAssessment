@@ -1,4 +1,8 @@
+// eslint-disable-next-line import/no-unresolved
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { AddQuestionsComponent } from './add-questions.component';
 
@@ -8,9 +12,11 @@ describe('AddQuestionsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AddQuestionsComponent ]
+      declarations: [AddQuestionsComponent],
+      imports: [ReactiveFormsModule]
+
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(AddQuestionsComponent);
     component = fixture.componentInstance;
