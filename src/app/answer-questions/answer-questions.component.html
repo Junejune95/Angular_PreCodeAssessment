@@ -1,1 +1,35 @@
-<p>answer-questions works!</p>
+<div class="col-md-8 mx-auto">
+    <form [formGroup]="answerForm">
+        <ng-container formArrayName="answers">
+            <ng-container *ngFor="let subForm of addAnswers.controls; let i = index">
+                <ng-container [formGroupName]="i">
+                    <ng-container *ngIf="getQuestionByIndex(i) as question">
+                        <div class="form-group">
+                            <label [for]="question.labelName"> {{question.labelName}}
+                                {{question.isRequiredField ? '*' : ''}}
+                            </label>
+                            <ng-container *ngIf="question.questionType=='Paragraph';else checkbox">
+                                <textarea class="form-control" id="" cols="30" rows="5" formControlName="paragraph"></textarea>
+                            </ng-container>
+                            <ng-template #checkbox>
+                                <ng-container formArrayName="options">
+                                    <div *ngFor="let option of question.options; let x=index">
+                                        <label>
+                                            <input type="checkbox" [formControlName]="x">
+                                            {{option}}
+                                        </label>
+                                    </div>
+                                </ng-container>
+
+                            </ng-template>
+                        </div>
+                    </ng-container>
+
+                </ng-container>
+            </ng-container>
+        </ng-container>
+
+        <button class="btn btn-primary" (click)="onReview()">Review my answers ></button>
+    </form>
+    <ng-content select="[addbutton]"></ng-content>
+</div>

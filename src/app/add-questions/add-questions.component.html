@@ -9,7 +9,10 @@
 </div>
 
 <div class="container" *ngIf="!isEmpty">
-    <app-answer-questions [questionList]="questionList"></app-answer-questions>
+    <app-answer-questions [questionList]="questionList">
+        <button type="button" class="btn btn-link mb-3" (click)="openQuestionModal(questionModal)" addbutton>Add New
+            Question</button>
+    </app-answer-questions>
 </div>
 
 
@@ -23,27 +26,38 @@
             <ng-container formArrayName="questions">
                 <ng-container *ngFor="let subForm of addQuestion.controls; let i = index">
                     <ng-container [formGroupName]="i">
+
                         <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Checkbox List"
-                                formControlName="checkbox">
+                            <input type="text" class="form-control" placeholder="Question Label"
+                                formControlName="labelName">
                         </div>
+
                         <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Type question here"
-                                formControlName="typeQuestion">
+                            <select class="form-select mb-3" formControlName="questionType"
+                                (change)="onselectedType($event)">
+                                <option value="">Type Question here</option>
+                                <option *ngFor="let type of questionTypes" [value]="type">
+                                    {{ type }}
+                                </option>
+                            </select>
                         </div>
+
 
                         <!-- start option form array -->
-                        <ng-container formArrayName="options">
-                            <ng-container *ngFor="let option of optionByQuestionIndex(i).controls;let x=index;">
-                                <div class="form-group">
-                                    <input type="text" [formControlName]="x" class="form-control"
-                                        placeholder="Add Answer Option">
-                                </div>
+                        <ng-container *ngIf="selectedType==='Checkbox list'">
+                            <ng-container formArrayName="options">
+                                <ng-container *ngFor="let option of optionByQuestionIndex(i).controls;let x=index;">
+                                    <div class="form-group">
+                                        <input type="text" [formControlName]="x" class="form-control"
+                                            placeholder="Add Answer Option">
+                                    </div>
+                                </ng-container>
                             </ng-container>
+
+                            <button type="button" class="btn btn-link mb-3" (click)="addOptions(i)">&plus; Add another
+                                answer</button>
                         </ng-container>
 
-                        <button type="button" class="btn btn-link mb-3" (click)="addOptions(i)">&plus; Add another
-                            answer</button>
                         <!-- end of option form array -->
 
                         <!-- start check box field from question -->

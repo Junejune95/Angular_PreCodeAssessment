@@ -1,1 +1,19 @@
-<p>review-answers works!</p>
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="d-flex flex-column" *ngFor="let review of reviews">
+                <label>{{review.labelName}}</label>
+                <p *ngIf="review.paragraph">
+                    {{review.paragraph}}
+                </p>
+                <ng-container *ngIf="review.options.length > 0">
+                    <p *ngFor="let opt of review.options">
+                        {{opt}}
+                    </p>
+                </ng-container>
+                
+            </div>
+            <button type="button" class="btn btn-link mb-3" (click)="backPrev()" addbutton>Back to Forms Builder</button>
+        </div>
+    </div>
+</div>

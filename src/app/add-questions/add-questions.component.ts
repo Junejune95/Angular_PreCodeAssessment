@@ -12,7 +12,9 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class AddQuestionsComponent implements OnInit {
   public isEmpty = true;
-  public questionList: any=[];
+  public questionList: any = [];
+  public questionTypes = ['Paragraph', 'Checkbox list'];
+  public selectedType: 'Paragraph'| 'Checkbox list'='Paragraph';
 
   questionForm = this.fb.group({
     questions: this.fb.array([
@@ -31,8 +33,8 @@ export class AddQuestionsComponent implements OnInit {
   ngOnInit(): void {
     const question = localStorage.getItem('questions');
     this.isEmpty = question ? false : true;
-    if(question){
-      this.questionList=JSON.parse(window.atob(question));
+    if (question) {
+      this.questionList = JSON.parse(window.atob(question));
     }
     console.log(this.questionList);
 
@@ -45,8 +47,8 @@ export class AddQuestionsComponent implements OnInit {
 
   newQuestion(): FormGroup {
     return this.fb.group({
-      checkbox: [''],
-      typeQuestion: [''],
+      labelName: [''],
+      questionType: [''],
       isAllowOwnAns: [false],
       isRequiredField: [false],
       options: this.fb.array([
@@ -55,6 +57,9 @@ export class AddQuestionsComponent implements OnInit {
       ])
     });
   }
+
+
+
 
   addOptions(index: number) {
     this.optionByQuestionIndex(index).push(this.fb.control(''));
@@ -65,10 +70,27 @@ export class AddQuestionsComponent implements OnInit {
     this.modalService.open(content, { size: 'lg' });
   }
 
+  onselectedType(e: any) {
+    console.log(e.target.value);
+    this.selectedType=e.target.value;
+  }
   onSubmit() {
-    this.questionList.push(this.questionForm.value);
+    if(this.questionForm.value.questions){
+      this.questionList=[...this.questionList,...this.questionForm.value.questions];
+    }
+
+    console.log(this.questionList);
     localStorage.setItem('questions', window.btoa(JSON.stringify(this.questionList)));
     this.modalService.dismissAll();
+  }
+
+  openModal(content: any) {
+    this.modalService.open(content, { size: 'lg' });
+    this.questionForm = this.fb.group({
+      questions: this.fb.array([
+        this.newQuestion()
+      ])
+    });
   }
 
 }
