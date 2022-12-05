@@ -5,6 +5,11 @@ import { AddQuestionsComponent } from './add-questions/add-questions.component';
 
 const routes: Routes = [
   {
+    path: '',
+    redirectTo: 'questions',
+    pathMatch: 'full'
+  },
+  {
     path: 'questions',
     component: AddQuestionsComponent
   }

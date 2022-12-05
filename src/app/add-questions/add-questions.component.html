@@ -1,1 +1,74 @@
-<p>add-questions works!</p>
+<div class="container" *ngIf="isEmpty">
+    <div class="empty__question">
+        <h3 class="empty__text">
+            No questions have been added yet
+        </h3>
+        <button type="button" class="btn btn-primary" (click)="openQuestionModal(questionModal)">Add Question</button>
+    </div>
+
+</div>
+
+<div class="container" *ngIf="!isEmpty">
+    <app-answer-questions [questionList]="questionList"></app-answer-questions>
+</div>
+
+
+<ng-template #questionModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Add New Question</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="questionForm">
+            <ng-container formArrayName="questions">
+                <ng-container *ngFor="let subForm of addQuestion.controls; let i = index">
+                    <ng-container [formGroupName]="i">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Checkbox List"
+                                formControlName="checkbox">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Type question here"
+                                formControlName="typeQuestion">
+                        </div>
+
+                        <!-- start option form array -->
+                        <ng-container formArrayName="options">
+                            <ng-container *ngFor="let option of optionByQuestionIndex(i).controls;let x=index;">
+                                <div class="form-group">
+                                    <input type="text" [formControlName]="x" class="form-control"
+                                        placeholder="Add Answer Option">
+                                </div>
+                            </ng-container>
+                        </ng-container>
+
+                        <button type="button" class="btn btn-link mb-3" (click)="addOptions(i)">&plus; Add another
+                            answer</button>
+                        <!-- end of option form array -->
+
+                        <!-- start check box field from question -->
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="ownanswer"
+                                formControlName="isAllowOwnAns">
+                            <label class="form-check-label" for="ownanswer">
+                                Allow user to specify their own answer
+                            </label>
+                        </div>
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="fieldrequired"
+                                formControlName="isRequiredField">
+                            <label class="form-check-label" for="fieldrequired">
+                                This field is required
+                            </label>
+                        </div>
+                        <!-- end check box field from question -->
+                    </ng-container>
+                </ng-container>
+            </ng-container>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="onSubmit()">Submit</button>
+    </div>
+</ng-template>

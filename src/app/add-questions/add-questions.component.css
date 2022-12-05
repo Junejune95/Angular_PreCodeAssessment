@@ -1,0 +1,26 @@
+.empty__question {
+    text-align: center;
+    margin-top: 7rem;
+}
+
+h3.empty__text {
+    color: #5e5a5a;
+    margin-bottom: 3rem;
+}
+
+.form-group{
+    margin-bottom: 16px;
+}
+
+button.btn.btn-link {
+    text-decoration: none;
+}
+
+.form-check-input{
+    background: var(--primary-color);
+}
+
+.form-check-label{
+    color: var(--primary-color);
+    font-weight: 300;
+}
