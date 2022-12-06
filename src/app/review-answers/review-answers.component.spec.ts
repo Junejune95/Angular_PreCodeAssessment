@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-unresolved
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ReviewAnswersComponent } from './review-answers.component';

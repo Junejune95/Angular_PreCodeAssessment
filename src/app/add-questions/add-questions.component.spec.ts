@@ -1,8 +1,6 @@
 // eslint-disable-next-line import/no-unresolved
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { AddQuestionsComponent } from './add-questions.component';
 

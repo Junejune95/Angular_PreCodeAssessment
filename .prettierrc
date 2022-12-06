@@ -1,12 +1,11 @@
 {
   "singleQuote": true,
   "trailingComma": "all",
-  "endOfLine": "auto",
   "overrides": [
     {
-      "files": "*.html",
+      "files": ["packages/**/docs/rules/*.md"],
       "options": {
-        "parser": "angular"
+        "embeddedLanguageFormatting": "off"
       }
     }
   ]

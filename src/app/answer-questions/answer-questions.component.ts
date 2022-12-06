@@ -30,7 +30,7 @@ export class AnswerQuestionsComponent implements OnInit, OnDestroy {
     const reviewData = localStorage.getItem('review');
     if (reviewData) {
       const data = JSON.parse(window.atob(reviewData)).answers;
-      this.questionList.map((question: any) => {
+      this.questionList?.map((question: any) => {
         const exitData = data.filter((val: any) => val.labelName === question.labelName);
         const group: any = {};
         group.options = new FormArray([]);
@@ -61,7 +61,7 @@ export class AnswerQuestionsComponent implements OnInit, OnDestroy {
         this.addAnswers.push(new FormGroup(group));
       });
     } else {
-      this.questionList.map((question: any) => {
+      this.questionList?.map((question: any) => {
         const group: any = {};
         group.options = new FormArray([]);
         question.options.map(() => {
