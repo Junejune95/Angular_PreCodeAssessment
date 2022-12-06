@@ -37,17 +37,18 @@ export class AnswerQuestionsComponent implements OnInit, OnDestroy {
         question.options.map((opt: any) => {
           if (exitData.length > 0) {
             const exitOption = exitData[0].options.filter((val: any) => val === opt);
+
             group.options.push(this.fb.control(exitOption[0]));
+
           } else {
 
             group.options.push(this.fb.control(''));
-            // if(question.isAllowOwnAns){
-            //   question.options.push('Other');
-            //   group.options.push(this.fb.control(''));
-            // }
           }
 
         });
+        if(question.isAllowOwnAns){
+          group.ownAnswer = new FormControl(exitData.length === 0 ? '' : exitData[0].ownAnswer);
+        }
         group.paragraph = new FormControl(exitData.length === 0 ? '' : exitData[0].paragraph);
         if (question.isRequiredField === true) {
           if (question.questionType === 'Paragraph') {
@@ -65,11 +66,11 @@ export class AnswerQuestionsComponent implements OnInit, OnDestroy {
         group.options = new FormArray([]);
         question.options.map(() => {
           group.options.push(this.fb.control(''));
-          // if(question.isAllowOwnAns){
-          //   question.options.push('Other');
-          //   group.options.push(this.fb.control(''));
-          // }
         });
+        console.log(question);
+        if(question.isAllowOwnAns){
+          group.ownAnswer = new FormControl('');
+        }
         group.paragraph = new FormControl('');
         if (question.isRequiredField === true) {
           if (question.questionType === 'Paragraph') {
@@ -93,10 +94,7 @@ export class AnswerQuestionsComponent implements OnInit, OnDestroy {
 
   optionByIndex(index: number) {
     return this.addAnswers.at(index).get('options') as FormArray;
-
   }
-
-
   onReview() {
     if (this.answerForm.invalid) {
       return;
@@ -116,13 +114,6 @@ export class AnswerQuestionsComponent implements OnInit, OnDestroy {
 
     localStorage.setItem('review', window.btoa(JSON.stringify(review)));
     this.router.navigateByUrl('form/answers');
-  }
-
-  onClick(option: any,index: any){
-    console.log(this.optionByIndex(index));
-    // if(option==='Other'){
-    //   this.optionByIndex(index).push(this.fb.control(''));
-    // }
   }
 
   ngOnDestroy() {

@@ -16,14 +16,17 @@
                                 <ng-container formArrayName="options">
                                     <div *ngFor="let option of question.options; let x=index">
                                         <label style="font-weight: 400;">
-                                            <input type="checkbox" [formControlName]="x" (click)="onClick(option,i)">
+                                            <input type="checkbox" [formControlName]="x">
                                             {{option}}
                                         </label>
-                                        <!-- <ng-container *ngIf="expression"></ng-container>
-                                        <textarea class="form-control" id="" cols="30" rows="5"
-                                        formControlName="x"></textarea> -->
+
                                     </div>
                                 </ng-container>
+                                <ng-container *ngIf="question.isAllowOwnAns===true && optionByIndex(i).controls[question.options.length-1].value">
+                                    <textarea class="form-control" id="" cols="30" rows="5"
+                                    formControlName="ownAnswer"></textarea>
+                                </ng-container>
+
                             </ng-template>
                         </div>
                     </ng-container>
@@ -32,7 +35,7 @@
             </ng-container>
         </ng-container>
         <ng-content select="[addbutton]"></ng-content>
-        <div class="d-flex justify-content-end">
+        <div class="d-flex justify-content-end pb-5">
             <button class="btn btn-primary" (click)="onReview()">Review my answers ></button>
         </div>
 

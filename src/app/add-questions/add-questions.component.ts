@@ -78,6 +78,16 @@ export class AddQuestionsComponent implements OnInit {
       return;
     }
     if (this.questionForm.value.questions) {
+      const question = this.questionForm.value;
+      if (question.questions) {
+        question.questions.map((data: any) => {
+          if(data.isAllowOwnAns===true){
+            data.options.push('Other');
+            data.ownAnswer='';
+          }
+        });
+      };
+
       this.questionList = [...this.questionList, ...this.questionForm.value.questions];
     }
 

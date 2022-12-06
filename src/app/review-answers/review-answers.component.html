@@ -7,9 +7,13 @@
                     {{review.paragraph}}
                 </p>
                 <ng-container *ngIf="review.options.length > 0">
-                    <p *ngFor="let opt of review.options">
-                        {{opt}}
-                    </p>
+                    <ng-container *ngFor="let opt of review.options">
+                        <p *ngIf="opt!='Other'">
+                            {{opt}}
+                        </p>
+                    </ng-container>
+                    
+                    <p *ngIf="review.ownAnswer">{{review.ownAnswer}}</p>
                 </ng-container>
                 
             </div>
