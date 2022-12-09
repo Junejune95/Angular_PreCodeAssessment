@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 
@@ -13,7 +13,7 @@ import { Review } from '../models/index';
   templateUrl: './review-answers.component.html',
   styleUrls: ['./review-answers.component.css']
 })
-export class ReviewAnswersComponent implements OnInit {
+export class ReviewAnswersComponent implements OnInit, OnDestroy {
   public reviews=new Array<Review>();
   private subscription: Subscription | undefined;
 
@@ -21,7 +21,6 @@ export class ReviewAnswersComponent implements OnInit {
 
   ngOnInit(): void {
     this.getReivewData();
-    console.log(this.reviews);
 
   }
 
@@ -37,6 +36,12 @@ export class ReviewAnswersComponent implements OnInit {
 
   backPrev(){
     this.loc.back();
+  }
+
+  ngOnDestroy(): void {
+      if(this.subscription){
+        this.subscription.unsubscribe();
+      }
   }
 
 }

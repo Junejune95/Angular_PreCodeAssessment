@@ -38,8 +38,10 @@ export class AnswerQuestionsComponent implements OnDestroy, OnChanges {
 
         this.questionList?.map((question: any) => {
           const exitData = reviewData.filter((val: any) => val.labelName === question.labelName);
+          console.log(exitData);
           const group: any = {};
           group.options = new FormArray([]);
+          console.warn(question.options);
           question.options.map((opt: any) => {
             if (exitData.length > 0) {
               const exitOption = exitData[0].options.filter((val: any) => val === opt);
@@ -71,7 +73,8 @@ export class AnswerQuestionsComponent implements OnDestroy, OnChanges {
           const group: any = {};
           group.options = new FormArray([]);
           question.options.map(() => {
-            group.options.push(this.fb.control(''));
+            const form=group.isRequiredField === true ? this.fb.control('',Validators.required) : this.fb.control('');
+            group.options.push(form);
           });
           if (question.isAllowOwnAns) {
             group.ownAnswer = new FormControl('');
@@ -80,10 +83,6 @@ export class AnswerQuestionsComponent implements OnDestroy, OnChanges {
           if (question.isRequiredField === true) {
             if (question.questionType === 'Paragraph') {
               group.paragraph.setValidators(Validators.required);
-            }
-
-            if (question.questionType === 'Checkbox list') {
-              group.options.setValidators(Validators.required);
             }
           }
           this.addAnswers.push(new FormGroup(group));
