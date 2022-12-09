@@ -1,8 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
+import { Subscription } from 'rxjs';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
+import { ShareDataService } from '../services/share-data.service';
+import { Question } from '../models/question';
 
 
 @Component({
@@ -10,20 +14,24 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   templateUrl: './add-questions.component.html',
   styleUrls: ['./add-questions.component.css']
 })
-export class AddQuestionsComponent implements OnInit {
+export class AddQuestionsComponent implements OnInit, OnDestroy {
   public isEmpty = true;
-  public questionList: any = [];
+  public questionList = new Array<Question>();
   public questionTypes = ['Paragraph', 'Checkbox list'];
   public selectedType: 'Paragraph' | 'Checkbox list' = 'Paragraph';
-
   questionForm = this.fb.group({
     questions: this.fb.array([
       this.newQuestion()
     ])
   });
 
-  constructor(private modalService: NgbModal, private fb: FormBuilder) {
+  private subscription?: Subscription;
+
+  constructor(private modalService: NgbModal, private fb: FormBuilder, private shareService: ShareDataService) {
+    // this.cdRef.detectChanges();
+    // this.getQuestion();
   }
+
 
 
   get addQuestion() {
@@ -31,12 +39,22 @@ export class AddQuestionsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const question = localStorage.getItem('questions');
-    this.isEmpty = question ? false : true;
-    if (question) {
-      this.questionList = JSON.parse(window.atob(question));
-    }
+    this.getQuestion();
+    // const question = localStorage.getItem('questions');
+    // if (question) {
+    //   this.questionList = JSON.parse(window.atob(question));
+    // console.log(this.questionList);
+    // }
 
+  }
+
+
+  getQuestion() {
+    this.subscription = this.shareService.getQuestions().subscribe((res) => {
+      this.questionList = res;
+      this.isEmpty = this.questionList.length === 0 ? true : false;
+
+    });
   }
 
   optionByQuestionIndex(index: number) {
@@ -58,19 +76,24 @@ export class AddQuestionsComponent implements OnInit {
   }
 
   addOptions(index: number) {
-    if(this.optionByQuestionIndex(index).length<=5){
-      this.optionByQuestionIndex(index).push(this.fb.control(''));
-    }
+    // if(this.optionByQuestionIndex(index).length<4){
+    this.optionByQuestionIndex(index).push(this.fb.control('', Validators.required));
+    // }
 
   }
 
-
   openQuestionModal(content: any) {
+    this.questionForm.reset();
+    this.selectedType = 'Paragraph';
+    this.questionForm = this.fb.group({
+      questions: this.fb.array([
+        this.newQuestion()
+      ])
+    });
     this.modalService.open(content, { size: 'lg' });
   }
 
   onselectedType(e: any) {
-    console.log(e.target.value);
     this.selectedType = e.target.value;
   }
   onSubmit() {
@@ -81,29 +104,24 @@ export class AddQuestionsComponent implements OnInit {
       const question = this.questionForm.value;
       if (question.questions) {
         question.questions.map((data: any) => {
-          if(data.isAllowOwnAns===true){
+          if (data.isAllowOwnAns === true) {
             data.options.push('Other');
-            data.ownAnswer='';
+            data.ownAnswer = '';
           }
         });
       };
 
-      this.questionList = [...this.questionList, ...this.questionForm.value.questions];
+      // this.questionList = [...this.questionList, ...this.questionForm.value.questions];
+      this.shareService.addQuestion(this.questionForm.value.questions);
     }
-
-    // this.isEmpty=false;
-    window.location.reload();
-    localStorage.setItem('questions', window.btoa(JSON.stringify(this.questionList)));
+    // localStorage.setItem('questions', window.btoa(JSON.stringify(this.questionList)));
     this.modalService.dismissAll();
   }
 
-  openModal(content: any) {
-    this.modalService.open(content, { size: 'lg' });
-    this.questionForm = this.fb.group({
-      questions: this.fb.array([
-        this.newQuestion()
-      ])
-    });
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
 }

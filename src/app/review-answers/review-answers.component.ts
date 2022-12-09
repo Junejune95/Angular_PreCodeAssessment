@@ -1,5 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
+import { Router } from '@angular/router';
+
+import { Subscription } from 'rxjs';
+
+import { ShareDataService } from '../services/share-data.service';
+import { Review } from '../models/index';
+
 
 @Component({
   selector: 'app-review-answers',
@@ -7,17 +14,25 @@ import { Location } from '@angular/common';
   styleUrls: ['./review-answers.component.css']
 })
 export class ReviewAnswersComponent implements OnInit {
-  public reviews: any;
-  constructor(private loc: Location) { }
+  public reviews=new Array<Review>();
+  private subscription: Subscription | undefined;
+
+  constructor(private loc: Location,private shareDataService: ShareDataService,private router: Router) { }
 
   ngOnInit(): void {
-    const tempReview=localStorage.getItem('review');
-    if( tempReview!= null){
-      this.reviews=JSON.parse(window.atob(tempReview)).answers;
-    }
-
+    this.getReivewData();
     console.log(this.reviews);
 
+  }
+
+  getReivewData(){
+    this.subscription=this.shareDataService.getReviews()
+    .subscribe((res: Review[])=>{
+      if(res.length===0){
+        this.router.navigateByUrl('form/builder');
+      }
+      this.reviews=res;
+    });
   }
 
   backPrev(){

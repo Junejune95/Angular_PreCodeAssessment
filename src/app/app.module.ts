@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 import { AddQuestionsComponent } from './add-questions/add-questions.component';
 import { AnswerQuestionsComponent } from './answer-questions/answer-questions.component';
 import { ReviewAnswersComponent } from './review-answers/review-answers.component';
+import { ShareDataService } from 'app/services/share-data.service';
 
 
 @NgModule({
@@ -25,7 +26,7 @@ import { ReviewAnswersComponent } from './review-answers/review-answers.componen
     ReactiveFormsModule,
     NgbModule
   ],
-  providers: [],
+  providers: [ ShareDataService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
