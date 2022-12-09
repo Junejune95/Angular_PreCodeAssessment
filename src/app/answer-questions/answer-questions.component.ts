@@ -34,7 +34,8 @@ export class AnswerQuestionsComponent implements OnDestroy, OnChanges {
   ngOnChanges(): void {
     this.subscription = this.shareService.getReviews().subscribe((res) => {
       const reviewData = res;
-      if (reviewData) {
+      if (reviewData.length > 0) {
+
         this.questionList?.map((question: any) => {
           const exitData = reviewData.filter((val: any) => val.labelName === question.labelName);
           const group: any = {};
@@ -62,14 +63,16 @@ export class AnswerQuestionsComponent implements OnDestroy, OnChanges {
           this.addAnswers.push(new FormGroup(group));
         });
       } else {
-        this.questionList?.map((question: any) => {
+        this.answerForm = this.fb.group({
+          answers: this.fb.array([
+          ])
+        });
+        this.questionList.map((question: any) => {
           const group: any = {};
           group.options = new FormArray([]);
-          if(question?.options){
-            question.options.map(() => {
-              group.options.push(this.fb.control(''));
-            });
-          }
+          question.options.map(() => {
+            group.options.push(this.fb.control(''));
+          });
           if (question.isAllowOwnAns) {
             group.ownAnswer = new FormControl('');
           }
@@ -95,7 +98,6 @@ export class AnswerQuestionsComponent implements OnDestroy, OnChanges {
   }
 
   optionByIndex(index: number) {
-    console.log(this.addAnswers.at(index).get('options'));
     return this.addAnswers.at(index).get('options') as FormArray;
   }
   onReview() {

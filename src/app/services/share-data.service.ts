@@ -34,9 +34,7 @@ export class ShareDataService {
   }
 
   addReview(review: Review[]){
-    console.log(review);
     this.reviewList=[...this.reviewList, ...review];
-    console.log(this.reviewList);
 
     this.reviews.next(this.reviewList);
   }

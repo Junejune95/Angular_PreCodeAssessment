@@ -22,9 +22,13 @@
 
                                     </div>
                                 </ng-container>
-                                <ng-container *ngIf="question.isAllowOwnAns===true && optionByIndex(i).controls[question.options.length-1].value">
-                                    <textarea class="form-control" id="" cols="30" rows="5"
-                                    formControlName="ownAnswer"></textarea>
+                              
+                                <ng-container *ngIf="question.isAllowOwnAns===true">
+                                    <ng-container *ngIf="optionByIndex(i).controls[question.options.length-1].value">
+                                        <textarea class="form-control" id="" cols="30" rows="5"
+                                        formControlName="ownAnswer"></textarea>
+                                    </ng-container>
+
                                 </ng-container>
 
                             </ng-template>

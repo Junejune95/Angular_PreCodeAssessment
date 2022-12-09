@@ -77,7 +77,7 @@ export class AddQuestionsComponent implements OnInit, OnDestroy {
 
   addOptions(index: number) {
     // if(this.optionByQuestionIndex(index).length<4){
-    this.optionByQuestionIndex(index).push(this.fb.control('', Validators.required));
+    this.optionByQuestionIndex(index).push(this.fb.control(''));
     // }
 
   }
@@ -109,13 +109,15 @@ export class AddQuestionsComponent implements OnInit, OnDestroy {
             data.ownAnswer = '';
           }
         });
+        this.shareService.addQuestion(this.questionForm.value.questions);
       };
 
       // this.questionList = [...this.questionList, ...this.questionForm.value.questions];
-      this.shareService.addQuestion(this.questionForm.value.questions);
+
+      this.modalService.dismissAll();
     }
     // localStorage.setItem('questions', window.btoa(JSON.stringify(this.questionList)));
-    this.modalService.dismissAll();
+
   }
 
   ngOnDestroy(): void {
